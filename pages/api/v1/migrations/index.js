@@ -22,7 +22,7 @@ const defaultMigrationOptions = {
 async function getHandle(request, response) {
   let dbClient;
   try {
-    const dbClient = await database.getNewClient();
+    dbClient = await database.getNewClient();
     const pedingMigrations = await migrationRunner({
       ...defaultMigrationOptions,
       dbClient,
@@ -36,16 +36,16 @@ async function getHandle(request, response) {
 async function postHandle(request, response) {
   let dbClient;
   try {
-    const dbClient = await database.getNewClient();
+    dbClient = await database.getNewClient();
     const migrateMigrations = await migrationRunner({
       ...defaultMigrationOptions,
       dryRun: false,
       dbClient,
     });
     if (migrateMigrations.length > 0) {
-      response.status(201).json(migrateMigrations);
+      return response.status(201).json(migrateMigrations);
     }
-    response.status(200).json(migrateMigrations);
+    return response.status(200).json(migrateMigrations);
   } finally {
     await dbClient.end();
   }
