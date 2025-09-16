@@ -1,7 +1,7 @@
 import { version as uuidVersion } from "uuid";
 import setCookieParser from "set-cookie-parser";
 import orchestrator from "tests/orchestrator.js";
-import session from "models/session";
+import session from "models/session.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 describe("POST /api/v1/sessions", () => {
-  describe("Anomymous user", () => {
+  describe("Anonymous user", () => {
     test("With incorrect `email` but correct `password`", async () => {
       await orchestrator.createUser({
         password: "senha-correta",

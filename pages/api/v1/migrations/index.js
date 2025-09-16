@@ -4,20 +4,20 @@ import migrator from "models/migrator.js";
 
 const router = createRouter();
 
-router.get(getHandle);
-router.post(postHandle);
+router.get(getHandler);
+router.post(postHandler);
 
 export default router.handler(controller.errorHandlers);
 
-async function getHandle(request, response) {
-  const pedingMigrations = await migrator.listPendingMigrations();
-  return response.status(200).json(pedingMigrations);
+async function getHandler(request, response) {
+  const pendingMigrations = await migrator.listPendingMigrations();
+  return response.status(200).json(pendingMigrations);
 }
 
-async function postHandle(request, response) {
-  const migrateMigrations = await migrator.runPendingMigrations();
-  if (migrateMigrations.length > 0) {
-    return response.status(201).json(migrateMigrations);
+async function postHandler(request, response) {
+  const migratedMigrations = await migrator.runPendingMigrations();
+  if (migratedMigrations.length > 0) {
+    return response.status(201).json(migratedMigrations);
   }
-  return response.status(200).json(migrateMigrations);
+  return response.status(200).json(migratedMigrations);
 }

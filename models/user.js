@@ -10,15 +10,15 @@ async function findOneById(id) {
   async function runSelectQuery(id) {
     const results = await database.query({
       text: `
-      SELECT
-        *
-      FROM
-        users
-      WHERE
-        id = $1
-      LIMIT
-        1
-      ;`,
+        SELECT
+          *
+        FROM
+          users
+        WHERE
+          id = $1
+        LIMIT
+          1
+        ;`,
       values: [id],
     });
 
@@ -41,14 +41,14 @@ async function findOneByUsername(username) {
   async function runSelectQuery(username) {
     const results = await database.query({
       text: `
-      SELECT
-        *
-      FROM
-        users
-      WHERE
-        LOWER(username) = LOWER($1)
-      LIMIT
-        1
+        SELECT
+          *
+        FROM
+          users
+        WHERE
+          LOWER(username) = LOWER($1)
+        LIMIT
+          1
       ;`,
       values: [username],
     });
@@ -72,14 +72,14 @@ async function findOneByEmail(email) {
   async function runSelectQuery(email) {
     const results = await database.query({
       text: `
-      SELECT
-        *
-      FROM
-        users
-      WHERE
-        LOWER(email) = LOWER($1)
-      LIMIT
-        1
+        SELECT
+          *
+        FROM
+          users
+        WHERE
+          LOWER(email) = LOWER($1)
+        LIMIT
+          1
       ;`,
       values: [email],
     });
@@ -106,12 +106,12 @@ async function create(userInputValues) {
   async function runInsertQuery(userInputValues) {
     const results = await database.query({
       text: `
-      INSERT INTO
-        users (username, email, password)
-      VALUES
-        ($1, $2, $3)
-      RETURNING
-        *
+        INSERT INTO
+          users (username, email, password)
+        VALUES
+          ($1, $2, $3)
+        RETURNING
+          *
       ;`,
       values: [
         userInputValues.username,
@@ -141,11 +141,11 @@ async function update(username, userInputValues) {
 
   const userWithNewValues = { ...currentUser, ...userInputValues };
 
-  const updateUser = await runUpdateQuery(userWithNewValues);
-  return updateUser;
+  const updatedUser = await runUpdateQuery(userWithNewValues);
+  return updatedUser;
 }
 
-async function runUpdateQuery(userWithNewValue) {
+async function runUpdateQuery(userWithNewValues) {
   const results = await database.query({
     text: `
       UPDATE
@@ -161,10 +161,10 @@ async function runUpdateQuery(userWithNewValue) {
         *
     `,
     values: [
-      userWithNewValue.id,
-      userWithNewValue.username,
-      userWithNewValue.email,
-      userWithNewValue.password,
+      userWithNewValues.id,
+      userWithNewValues.username,
+      userWithNewValues.email,
+      userWithNewValues.password,
     ],
   });
 

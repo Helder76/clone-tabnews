@@ -4,7 +4,7 @@ import { faker } from "@faker-js/faker";
 import database from "infra/database.js";
 import migrator from "models/migrator.js";
 import user from "models/user.js";
-import session from "models/session";
+import session from "models/session.js";
 
 const emailHttpUrl = `http://${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}`;
 
@@ -73,10 +73,10 @@ async function getLastEmail() {
   const emailListBody = await emailListResponse.json();
   const lastEmailItem = emailListBody.pop();
 
-  const emailTextResposne = await fetch(
+  const emailTextResponse = await fetch(
     `${emailHttpUrl}/messages/${lastEmailItem.id}.plain`,
   );
-  const emailTextBody = await emailTextResposne.text();
+  const emailTextBody = await emailTextResponse.text();
 
   lastEmailItem.text = emailTextBody;
 

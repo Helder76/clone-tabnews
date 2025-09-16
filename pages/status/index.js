@@ -11,7 +11,7 @@ export default function StatusPage() {
     <>
       <h1>Status</h1>
       <UpdatedAt />
-      <DataBaseInfo />
+      <DatabaseStatus />
     </>
   );
 }
@@ -21,15 +21,15 @@ function UpdatedAt() {
     refreshInterval: 2000,
   });
 
-  let UpdatedAtText = "Carregando...";
+  let updatedAtText = "Carregando...";
 
   if (!isLoading && data) {
-    UpdatedAtText = new Date(data.updated_at).toLocaleString("pt-BR");
+    updatedAtText = new Date(data.updated_at).toLocaleString("pt-BR");
   }
-  return <div>Última atualização: {UpdatedAtText}</div>;
+  return <div>Última atualização: {updatedAtText}</div>;
 }
 
-function DataBaseInfo() {
+function DatabaseStatus() {
   const { isLoading, data } = useSWR("/api/v1/status", fetchAPI, {
     refreshInterval: 2000,
   });
