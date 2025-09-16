@@ -45,7 +45,7 @@ async function create(userId) {
   return newSession;
 
   async function runInsertQuery(token, userId, expiresAt) {
-    const result = await database.query({
+    const results = await database.query({
       text: `
         INSERT INTO
           sessions (token, user_id, expires_at)
@@ -57,7 +57,7 @@ async function create(userId) {
       values: [token, userId, expiresAt],
     });
 
-    return result.rows[0];
+    return results.rows[0];
   }
 }
 
@@ -68,7 +68,7 @@ async function renew(sessionId) {
   return renewedSessionObject;
 
   async function runUpdateQuery(sessionId, expiresAt) {
-    const result = await database.query({
+    const results = await database.query({
       text: `
         UPDATE
           sessions
@@ -83,7 +83,7 @@ async function renew(sessionId) {
       values: [sessionId, expiresAt],
     });
 
-    return result.rows[0];
+    return results.rows[0];
   }
 }
 
@@ -92,7 +92,7 @@ async function expireById(sessionId) {
   return expiredSessionObject;
 
   async function runUpdateQuery(sessionId) {
-    const result = await database.query({
+    const results = await database.query({
       text: `
         UPDATE
           sessions
@@ -107,7 +107,7 @@ async function expireById(sessionId) {
       values: [sessionId],
     });
 
-    return result.rows[0];
+    return results.rows[0];
   }
 }
 

@@ -1,7 +1,7 @@
 import { version as uuidVersion } from "uuid";
 import setCookieParser from "set-cookie-parser";
-import orchestrator from "tests/orchestrator";
-import session from "models/session";
+import orchestrator from "tests/orchestrator.js";
+import session from "models/session.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -12,13 +12,13 @@ beforeAll(async () => {
 describe("DELETE /api/v1/sessions", () => {
   describe("Default user", () => {
     test("With nonexistent session", async () => {
-      const nonexistenToken =
+      const nonexistentToken =
         "ab78fb52b347d0621b57776063cb877d829b56ce8cbe60eb7e88669331f84148a8c666bb426e9a38e322b932c303e520";
 
       const response = await fetch("http://localhost:3000/api/v1/sessions", {
         method: "DELETE",
         headers: {
-          cookie: `session_id=${nonexistenToken}`,
+          cookie: `session_id=${nonexistentToken}`,
         },
       });
 
@@ -39,9 +39,7 @@ describe("DELETE /api/v1/sessions", () => {
         now: new Date(Date.now() - session.EXPIRATION_IN_MILLISECONDS),
       });
 
-      const createdUser = await orchestrator.createUser({
-        username: "UserWithExpiredSession",
-      });
+      const createdUser = await orchestrator.createUser();
 
       const sessionObject = await orchestrator.createSession(createdUser.id);
 

@@ -1,7 +1,7 @@
 import { version as uuidVersion } from "uuid";
 import orchestrator from "tests/orchestrator.js";
 import user from "models/user.js";
-import password from "models/password";
+import password from "models/password.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 describe("PATCH /api/v1/users/[username]", () => {
-  describe("Anomymous user", () => {
+  describe("Anonymous user", () => {
     test("With nonexistent username", async () => {
       const response = await fetch(
         "http://localhost:3000/api/v1/users/UsuarioInexistente",

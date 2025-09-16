@@ -1,7 +1,7 @@
 import { version as uuidVersion } from "uuid";
 import setCookieParser from "set-cookie-parser";
-import orchestrator from "tests/orchestrator";
-import session from "models/session";
+import orchestrator from "tests/orchestrator.js";
+import session from "models/session.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -47,16 +47,16 @@ describe("GET /api/v1/user", () => {
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
       // Session renewal assertions
-      const renewdSessionObject = await session.findOneValidByToken(
+      const renewedSessionObject = await session.findOneValidByToken(
         sessionObject.token,
       );
 
-      expect(renewdSessionObject.expires_at > sessionObject.expires_at).toEqual(
-        true,
-      );
-      expect(renewdSessionObject.updated_at > sessionObject.updated_at).toEqual(
-        true,
-      );
+      expect(
+        renewedSessionObject.expires_at > sessionObject.expires_at,
+      ).toEqual(true);
+      expect(
+        renewedSessionObject.updated_at > sessionObject.updated_at,
+      ).toEqual(true);
 
       // Set-Cookie assertions
       const parsedSetCookie = setCookieParser(response, {
@@ -92,16 +92,16 @@ describe("GET /api/v1/user", () => {
       });
 
       // Session renewal assertions with one minute to expire
-      const renewdSessionObject = await session.findOneValidByToken(
+      const renewedSessionObject = await session.findOneValidByToken(
         sessionObject.token,
       );
 
-      expect(renewdSessionObject.expires_at > sessionObject.expires_at).toEqual(
-        true,
-      );
-      expect(renewdSessionObject.updated_at > sessionObject.updated_at).toEqual(
-        true,
-      );
+      expect(
+        renewedSessionObject.expires_at > sessionObject.expires_at,
+      ).toEqual(true);
+      expect(
+        renewedSessionObject.updated_at > sessionObject.updated_at,
+      ).toEqual(true);
 
       // Set-Cookie assertions
       const parsedSetCookie = setCookieParser(response, {
@@ -117,12 +117,12 @@ describe("GET /api/v1/user", () => {
     });
 
     test("With nonexistent session", async () => {
-      const nonexistenToken =
+      const nonexistentToken =
         "ab78fb52b347d0621b57776063cb877d829b56ce8cbe60eb7e88669331f84148a8c666bb426e9a38e322b932c303e520";
 
       const response = await fetch("http://localhost:3000/api/v1/user", {
         headers: {
-          cookie: `session_id=${nonexistenToken}`,
+          cookie: `session_id=${nonexistentToken}`,
         },
       });
 

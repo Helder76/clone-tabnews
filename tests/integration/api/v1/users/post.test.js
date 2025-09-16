@@ -1,7 +1,7 @@
 import { version as uuidVersion } from "uuid";
 import orchestrator from "tests/orchestrator.js";
 import user from "models/user.js";
-import password from "models/password";
+import password from "models/password.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 describe("POST /api/v1/users", () => {
-  describe("Anomymous user", () => {
+  describe("Anonymous user", () => {
     test("With unique and valid data", async () => {
       const response = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
@@ -49,7 +49,7 @@ describe("POST /api/v1/users", () => {
       expect(correctPasswordMatch).toBe(true);
 
       const incorrectPasswordMatch = await password.compare(
-        "senha124",
+        "SenhaErrada",
         userInDatabase.password,
       );
       expect(incorrectPasswordMatch).toBe(false);

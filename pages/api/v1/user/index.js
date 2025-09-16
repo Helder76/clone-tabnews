@@ -5,18 +5,18 @@ import session from "models/session.js";
 
 const router = createRouter();
 
-router.get(getHandle);
+router.get(getHandler);
 
 export default router.handler(controller.errorHandlers);
 
-async function getHandle(request, response) {
+async function getHandler(request, response) {
   const sessionToken = request.cookies.session_id;
 
-  const sessionObeject = await session.findOneValidByToken(sessionToken);
-  const renewedSessionObject = await session.renew(sessionObeject.id);
+  const sessionObject = await session.findOneValidByToken(sessionToken);
+  const renewedSessionObject = await session.renew(sessionObject.id);
   controller.setSessionCookie(renewedSessionObject.token, response);
 
-  const userFound = await user.findOneById(sessionObeject.user_id);
+  const userFound = await user.findOneById(sessionObject.user_id);
 
   response.setHeader(
     "Cache-Control",

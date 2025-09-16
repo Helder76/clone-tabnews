@@ -1,19 +1,19 @@
 import * as cookie from "cookie";
-import session from "models/session";
+import session from "models/session.js";
 import {
   InternalServerError,
-  MethodNotAlloedError,
+  MethodNotAllowedError,
   ValidationError,
   NotFoundError,
   UnauthorizedError,
 } from "infra/errors.js";
 
 function onNoMatchHandler(request, response) {
-  const publicErrorObject = new MethodNotAlloedError();
+  const publicErrorObject = new MethodNotAllowedError();
   response.status(publicErrorObject.statusCode).json(publicErrorObject);
 }
 
-function onErrorHandle(error, request, response) {
+function onErrorHandler(error, request, response) {
   if (error instanceof ValidationError || error instanceof NotFoundError) {
     return response.status(error.statusCode).json(error);
   }
@@ -55,7 +55,7 @@ async function clearSessionCookie(response) {
 const controller = {
   errorHandlers: {
     onNoMatch: onNoMatchHandler,
-    onError: onErrorHandle,
+    onError: onErrorHandler,
   },
   setSessionCookie,
   clearSessionCookie,
