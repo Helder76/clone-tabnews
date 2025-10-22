@@ -87,6 +87,12 @@ async function getLastEmail() {
   return lastEmailItem;
 }
 
+function extractUIID(text) {
+  const tokenRegex = /\/cadastro\/ativar\/([a-fA-F0-9-]{36})/;
+  const match = text.match(tokenRegex);
+  return match ? match[1] : null;
+}
+
 const orchestrator = {
   waitForAllServices,
   clearDatabase,
@@ -95,6 +101,7 @@ const orchestrator = {
   createSession,
   deleteAllEmails,
   getLastEmail,
+  extractUIID,
 };
 
 export default orchestrator;

@@ -27,11 +27,11 @@ async function create(userId) {
   }
 }
 
-async function findOneByUserId(userId) {
-  const newToken = await runSelectQuery(userId);
-  return newToken;
+async function findOneValidById(tokenId) {
+  const idToken = await runSelectQuery(tokenId);
+  return idToken;
 
-  async function runSelectQuery(userId) {
+  async function runSelectQuery(tokenId) {
     const result = await database.query({
       text: `
         SELECT
@@ -39,10 +39,12 @@ async function findOneByUserId(userId) {
         FROM
           user_activation_tokens
         WHERE
-          user_id = $1
+          id = $1
+          AND expires_at > NOW()
+          AND used_at IS NULL
         LIMIT 1
       ;`,
-      values: [userId],
+      values: [tokenId],
     });
 
     return result.rows[0];
@@ -66,7 +68,7 @@ Equipe Okcode`,
 const activation = {
   create,
   sendEmailToUser,
-  findOneByUserId,
+  findOneValidById,
 };
 
 export default activation;
