@@ -89,9 +89,8 @@ async function getLastEmail() {
 }
 
 function extractUIID(text) {
-  const tokenRegex = /\/cadastro\/ativar\/([a-fA-F0-9-]{36})/;
-  const match = text.match(tokenRegex);
-  return match ? match[1] : null;
+  const match = text.match(/[0-9a-fA-F-]{36}/);
+  return match ? match[0] : null;
 }
 
 async function activateUser(inactiveUSer) {

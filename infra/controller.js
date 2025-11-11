@@ -61,7 +61,7 @@ async function clearSessionCookie(response) {
 }
 
 async function injectAnonymousOrUser(request, response, next) {
-  if (request.cookie?.session_id) {
+  if (request.cookies?.session_id) {
     await injectAuthenticatedUser(request);
     return next();
   }
@@ -73,7 +73,7 @@ async function injectAnonymousOrUser(request, response, next) {
 async function injectAuthenticatedUser(request) {
   const sessionToken = request.cookies.session_id;
   const sessionObject = await session.findOneValidByToken(sessionToken);
-  const userOjject = await user.findOneValidByToken(sessionObject.user_id);
+  const userOjject = await user.findOneById(sessionObject.user_id);
 
   request.context = {
     ...request.context,
@@ -94,7 +94,6 @@ function injectAnonymousUser(request) {
 
 function canRequest(feature) {
   return function canRequestMiddleware(request, response, next) {
-    console.log(request.context);
     const userTryingToRequest = request.context.user;
 
     if (authorization.can(userTryingToRequest, feature)) {
