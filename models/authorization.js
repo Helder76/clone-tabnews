@@ -1,4 +1,34 @@
+import { InternalServerError } from "../infra/errors.js";
+
+const availableFeatures = [
+  // USERS
+  "create:user",
+  "read:user",
+  "read:user:self",
+  "update:user",
+  "update:user:others",
+
+  // SESSIONS
+  "create:session",
+  "read:session",
+
+  // ACTIVATION TOKENS
+  "create:activation_token",
+  "read:activation_token",
+
+  // MIGRATIONS
+  "create:migration",
+  "read:migration",
+
+  // STATUS
+  "read:status",
+  "read:status:all",
+];
+
 function can(user, feature, resource) {
+  validateUser(user);
+  validateFeature(feature);
+
   let authorized = false;
 
   if (user.features.includes(feature)) {
@@ -17,6 +47,10 @@ function can(user, feature, resource) {
 }
 
 function filterOutput(user, feature, resource) {
+  validateUser(user);
+  validateFeature(feature);
+  validateResorce(resource);
+
   if (feature === "read:user") {
     return {
       id: resource.id,
@@ -91,6 +125,32 @@ function filterOutput(user, feature, resource) {
     }
 
     return output;
+  }
+}
+
+function validateUser(user) {
+  if (!user || !user.features) {
+    throw new InternalServerError({
+      cause: "É necessário forncecer `user` no model `authorization`.",
+    });
+  }
+}
+
+function validateFeature(feature) {
+  if (!feature || !availableFeatures.includes(feature)) {
+    throw new InternalServerError({
+      cause:
+        "É necessário forncecer uma `feature` conhecida no model `authorization`.",
+    });
+  }
+}
+
+function validateResorce(resource) {
+  if (!resource) {
+    throw new InternalServerError({
+      cause:
+        "É necessário forncecer um `resorce` em `authorization.filterOutput()`.",
+    });
   }
 }
 
